@@ -2,26 +2,17 @@
 """
 Created on Fri Jun  5 15:56:25 2020
 
-@author: user
+@author: Michael Chen
 """
 
 
 import torch, sys, os
 import torch.nn as nn
-#import torch.utils.data as dset
 import torchvision 
 import matplotlib.pyplot as plt
-#import glob
 import torch.nn.functional as F
 import numpy as np
 import pandas as pd
-#from sklearn.metrics import confusion_matrix
-#from torchvision import datasets, transforms, models
-
-#PATH = glob.glob(r'C:\Users\user\Documents\NCCU\CV\proposal\cnn.pth')
-device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-print('Device name:',torch.cuda.get_device_name())
-print('GPU State:', device)
 
 train_transform = torchvision.transforms.Compose([torchvision.transforms.ToTensor(), 
                                                   torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -35,7 +26,7 @@ TEST_COUNT = 10_000
 
 color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
 class_label = {0:'plane',1:'car',2:'bird',3:'cat',4:'deer',5:'dog',6:'frog',7:'horse',8:'ship',9:'truck'}
-ROOT = r'C:\Users\user\Documents\NCCU\CV\proposal'
+ROOT = r'C:\Users\user\Documents\proposal'
 LIST_csv_name = ['cifar-10-train-.csv','cifar-10-val-.csv','cifar-10-test-.csv']
 
 
@@ -90,13 +81,11 @@ for item in LIST_csv_name:
     csv_df = pd.read_csv(os.path.join(ROOT,item))
     category_conut = len(csv_df.category.unique())
     item_count = csv_df.shape[0]
-    plt.rcParams.update({'font.size': 22})
-    
+    plt.rcParams.update({'font.size': 22})    
     temp = csv_df.groupby('category').count()
     count = temp.iloc[:,0].tolist()
     plt.figure(figsize=(16,9))
     plt.title("Cifar-10 Category Histogram "+item.split('-')[2])
-
     plt.title("Cifar-10 Category Histogram "+item.split('-')[2])
     plt.bar(class_label.values(), count, alpha=0.9, color=color_cycle)
     for x, y in zip(class_label.values(), count):
